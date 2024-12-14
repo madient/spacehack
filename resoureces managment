@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int man(int weight, int height, int age) {
+    return 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age);
+}
+
+int woman(int weight, int height, int age) {
+    return 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age);
+}
+
+int main() {
+    int crew, weight, height, age;
+    double food = 0.0, sum = 0.0;
+    string sex;
+
+    cin >> crew;
+    vector<double> allneed;
+
+    for (int i = 0; i < crew; i++) {
+        cin >> weight >> height >> age >> sex;
+        
+        if (sex == "female") {
+            food = woman(weight, height, age) * 1.375;
+        } else {
+            food = man(weight, height, age) * 1.375;
+        }
+        
+        allneed.push_back(food);
+    }
+
+    for (int j = 0; j < crew; j++) {
+        sum += allneed[j];
+    }
+
+    cout << "Total food requirement: " << sum << " units." << endl;
+    return 0;
+}
