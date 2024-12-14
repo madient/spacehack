@@ -12,29 +12,65 @@ int woman(int weight, int height, int age) {
 }
 
 int main() {
-    int crew, weight, height, age;
-    double food = 0.0, sum = 0.0;
+    int weight, height, age, crew;
+    int duration; // Duration of the trip in years
+    long long food = 0.0, sum = 0.0; // Double for precision
     string sex;
 
+    double calories_per_kg_food; // Average caloric density of food (kcal/kg)
+
+    // Input trip duration and number of people
+    cout << "Duration of the trip (in years): ";
+    cin >> duration;
+
+    cout << "Number of people: ";
     cin >> crew;
+    
+    cout << "Average caloric density of food (kcal/kg)";
+    cin >> calories_per_kg_food;
+
     vector<double> allneed;
 
+    // Input details for each person
     for (int i = 0; i < crew; i++) {
-        cin >> weight >> height >> age >> sex;
-        
+        cout << "Person " << i + 1 << " details:" << endl;
+
+        cout << "Weight (in kg): ";
+        cin >> weight;
+
+        cout << "Height (in cm): ";
+        cin >> height;
+
+        cout << "Age (in years): ";
+        cin >> age;
+
+        cout << "Sex (male or female): ";
+        cin >> sex;
+
         if (sex == "female") {
-            food = woman(weight, height, age) * 1.375;
+            food = woman(weight, height, age) * 1.375 + 2000; // Adjusted for activity
         } else {
-            food = man(weight, height, age) * 1.375;
+            food = man(weight, height, age) * 1.375 + 2000; // Adjusted for activity
         }
-        
-        allneed.push_back(food);
+
+        allneed.push_back(food); // Add individual's daily calorie requirement
     }
 
+    // Calculate total daily calorie requirements for the crew
     for (int j = 0; j < crew; j++) {
         sum += allneed[j];
     }
 
-    cout << "Total food requirement: " << sum << " units." << endl;
+    // Total calorie requirement over the entire trip
+    double total_calories = sum * 365 * duration;
+
+    // Convert total calories to kilograms of food
+    double total_food_kg = total_calories / calories_per_kg_food;
+
+    // Output results
+    cout << "\nTotal daily calorie requirement for the crew: " << sum << " kcal." << endl;
+    cout << "Total calorie requirement over " << duration << " years: " << total_calories << " kcal." << endl;
+    cout << "Equivalent food weight: " << total_food_kg << " kg." << endl;
+
     return 0;
 }
