@@ -1,0 +1,169 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+class AirManagement {
+private:
+    double oxygenLevel;  // Уровень кислорода в процентах
+    double co2Level;     // Уровень CO2 в процентах
+
+public:
+    AirManagement() : oxygenLevel(21.0), co2Level(0.04) {}  // Нормальные значения для атмосферы Земли
+
+    void regulateOxygen(double oxygenConsumed) {
+        oxygenLevel -= oxygenConsumed;
+        if (oxygenLevel < 18.0) {
+            std::cout << "Warning: Oxygen levels are too low! Initiating oxygen generation...\n";
+            oxygenLevel = 21.0;  // Генерация кислорода, вернув нормальное значение
+        }
+        std::cout << "Current Oxygen Level: " << oxygenLevel << "%\n";
+    }
+
+    void removeCO2(double co2Produced) {
+        co2Level += co2Produced;
+        if (co2Level > 0.05) {
+            std::cout << "Warning: CO2 levels are too high! Initiating CO2 filtration...\n";
+            co2Level = 0.04;  // Очистка CO2, возвращаем нормальный уровень
+        }
+        std::cout << "Current CO2 Level: " << co2Level << "%\n";
+    }
+
+    void filterAir() {
+        std::cout << "Filtering air to remove particles and impurities...\n";
+    }
+};
+
+class WaterManagement {
+private:
+    double waterSupply;  // Объем воды на станции в литрах
+
+public:
+    WaterManagement() : waterSupply(1000.0) {}  // Начальный запас воды
+
+    void recycleWater(double waterUsed) {
+        waterSupply -= waterUsed;
+        if (waterSupply < 100.0) {
+            std::cout << "Warning: Water supply is low! Initiating water recycling...\n";
+            waterSupply = 1000.0;  // Переработка воды, возвращаем нормальный уровень
+        }
+        std::cout << "Current Water Supply: " << waterSupply << " liters\n";
+    }
+
+    void purifyWater() {
+        std::cout << "Purifying water...\n";
+    }
+};
+
+class FoodManagement {
+private:
+    double foodSupply;  // Запас пищи в килограммах
+
+public:
+    FoodManagement() : foodSupply(500.0) {}  // Начальный запас пищи
+
+    void manageFood(double foodConsumed) {
+        foodSupply -= foodConsumed;
+        if (foodSupply < 50.0) {
+            std::cout << "Warning: Food supply is low! Initiating food replenishment...\n";
+            foodSupply = 500.0;  // Пополнение продовольственных запасов
+        }
+        std::cout << "Current Food Supply: " << foodSupply << " kg\n";
+    }
+
+    void prepareMeals() {
+        std::cout << "Preparing meals...\n";
+    }
+};
+
+class WasteManagement {
+private:
+    double wasteAmount;  // Количество отходов в килограммах
+
+public:
+    WasteManagement() : wasteAmount(0.0) {}  // Изначально отходов нет
+
+    void processWaste(double wasteProduced) {
+        wasteAmount += wasteProduced;
+        if (wasteAmount > 100.0) {
+            std::cout << "Warning: Waste levels are too high! Initiating waste processing...\n";
+            wasteAmount = 0.0;  // Переработка отходов
+        }
+        std::cout << "Current Waste Level: " << wasteAmount << " kg\n";
+    }
+
+    void manageRecycling() {
+        std::cout << "Managing recycling processes...\n";
+    }
+};
+
+class HealthMonitoring {
+private:
+    double radiationLevel;  // Уровень радиации
+
+public:
+    HealthMonitoring() : radiationLevel(0.0) {}  // Нормальный уровень радиации
+
+    void monitorHealth() {
+        std::cout << "Monitoring health...\n";
+    }
+
+    void checkRadiationLevels() {
+        std::cout << "Current Radiation Level: " << radiationLevel << " units\n";
+        if (radiationLevel > 50.0) {
+            std::cout << "Warning: Radiation levels are too high! Activating shielding...\n";
+            radiationLevel = 0.0;  // Возвращаем нормальный уровень радиации
+        }
+    }
+
+    void increaseRadiation(double radiation) {
+        radiationLevel += radiation;
+        std::cout << "Radiation levels increased by " << radiation << " units.\n";
+    }
+};
+
+class SpaceStation {
+private:
+    AirManagement air;
+    WaterManagement water;
+    FoodManagement food;
+    WasteManagement waste;
+    HealthMonitoring health;
+
+public:
+    SpaceStation() {}
+
+    void startLifeSupport() {
+        std::cout << "Starting Life Support Systems...\n";
+
+        // Регулируем кислород и CO2 на основе потребности
+        air.regulateOxygen(0.2);  // Например, потреблено 0.2% кислорода
+        air.removeCO2(0.01);      // Например, произведено 0.01% CO2
+        air.filterAir();
+
+        // Перерабатываем воду
+        water.recycleWater(50.0);  // Например, использовано 50 литров воды
+        water.purifyWater();
+
+        // Управляем продовольственными запасами
+        food.manageFood(10.0);     // Например, использовано 10 кг пищи
+        food.prepareMeals();
+
+        // Перерабатываем отходы
+        waste.processWaste(5.0);   // Например, произведено 5 кг отходов
+        waste.manageRecycling();
+
+        // Мониторинг здоровья
+        health.monitorHealth();
+        health.checkRadiationLevels();
+        health.increaseRadiation(10.0);  // Например, радиация увеличилась на 10 единиц
+
+        std::cout << "Life Support Systems are fully operational.\n";
+    }
+};
+
+int main() {
+    SpaceStation station;
+    station.startLifeSupport();  // Запуск всех систем
+
+    return 0;
+}
