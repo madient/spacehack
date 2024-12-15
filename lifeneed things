@@ -1,52 +1,47 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iomanip> // Для настройки точности вывода
 
 using namespace std;
 
-// Функция для расчета энергии
-double calculateEnergy(int numPeople, const vector<double>& energyNeeds) {
+// Функция для расчета энергии с учетом исключений для определенных компонентов
+double calculateEnergy(int numPeople, const vector<string>& components, const vector<double>& energyNeeds) {
     double totalEnergy = 0;
-    for (double energy : energyNeeds) {
-        totalEnergy += energy;
+
+    // Итерируем по компонентам и суммируем энергопотребление
+    for (size_t i = 0; i < components.size(); ++i) {
+        // Для некоторых компонентов не умножаем на количество людей
+        if (components[i] == "Медицина" || components[i] == "Освещение" || components[i] == "Лаборатория" || components[i] == "Школа")  {
+            totalEnergy += energyNeeds[i];  // Просто добавляем без умножения
+        } else {
+            totalEnergy += energyNeeds[i] * numPeople;  // Умножаем на количество людей для остальных компонентов
+        }
     }
-    return numPeople * totalEnergy;
+
+    return totalEnergy;
 }
 
 int main() {
-    // Количество людей
-    int numPeople;
+    int numPeople; // Количество людей на станции
+    vector<string> components = {"Лаборатория", "Школа", "Личное пространство", "Система жизнеобеспечения", 
+                                 "Освещение", "Медицина"};
+    vector<double> energyNeeds; // Энергопотребление каждого компонента
 
     // Ввод количества людей
     cout << "Введите количество людей на станции: ";
     cin >> numPeople;
 
-    // Переменные для энергопотребления
-    double labEnergy, schoolEnergy, personalEnergy, lifeSupportEnergy, lightingEnergy, medicalEnergy;
-    double additionalEnergy;
-    vector<string> components = {"Лаборатория", "Школа", "Личное пространство", "Система жизнеобеспечения", 
-                                 "Освещение", "Медицина"};
-
-    // Ввод значений энергопотребления для каждого компонента
+    // Ввод энергопотребления для основных компонентов
     cout << "Введите энергопотребление для каждого компонента (в kWh на человека в месяц):" << endl;
-    
-    cout << "Лаборатория: ";
-    cin >> labEnergy;
-    cout << "Школа: ";
-    cin >> schoolEnergy;
-    cout << "Личное пространство: ";
-    cin >> personalEnergy;
-    cout << "Система жизнеобеспечения: ";
-    cin >> lifeSupportEnergy;
-    cout << "Освещение: ";
-    cin >> lightingEnergy;
-    cout << "Медицина: ";
-    cin >> medicalEnergy;
+    for (const string& component : components) {
+        double energy;
+        cout << component << ": ";
+        cin >> energy;
+        energyNeeds.push_back(energy);
+    }
 
-    // Вектор для хранения энергопотребления каждого компонента
-    vector<double> energyNeeds = {labEnergy, schoolEnergy, personalEnergy, lifeSupportEnergy, lightingEnergy, medicalEnergy};
-
-    // Запрос на добавление дополнительных компонентов
+    // Добавление дополнительных компонентов
     char addComponent;
     do {
         cout << "Хотите добавить еще компонент энергопотребления? (y/n): ";
@@ -56,22 +51,25 @@ int main() {
             string componentName;
             double componentEnergy;
             
+            // Очистка буфера ввода перед getline
+            cin.ignore();
+            
             cout << "Введите название компонента: ";
-            cin.ignore();  // Чтобы избежать проблемы с getline после cin
             getline(cin, componentName);
+            
             cout << "Введите энергопотребление для компонента \"" << componentName << "\" (в kWh на человека в месяц): ";
             cin >> componentEnergy;
             
             components.push_back(componentName);
             energyNeeds.push_back(componentEnergy);
         }
-        
     } while (addComponent == 'y' || addComponent == 'Y');
 
-    // Расчет общей потребности в энергии
-    double totalEnergy = calculateEnergy(numPeople, energyNeeds);
+    // Расчет общего энергопотребления
+    double totalEnergy = calculateEnergy(numPeople, components, energyNeeds);
 
-    // Вывод результатов
+    // Вывод результатов с ограничением точности до 2 знаков после запятой
+    cout << fixed << setprecision(2); // Устанавливаем точность для вывода чисел с плавающей точкой
     cout << "\nОбщее потребление энергии для " << numPeople << " человек в месяц: " << totalEnergy / 1000 << " MWh" << endl;
     cout << "Общее потребление энергии для " << numPeople << " человек в год: " << (totalEnergy / 1000) * 12 << " MWh" << endl;
 
